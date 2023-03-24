@@ -154,4 +154,4 @@ docker-compose up
 <br />
 
 ## ✏️ Authors <a name = "authors"></a>
-- Made with ❤️  by dataengineering@hype.it
+- Made with ❤️  by Vittorio Polverino
