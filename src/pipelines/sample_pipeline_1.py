@@ -6,11 +6,11 @@ from src.pipeline import Pipeline
 
 
 @dataclass
-class HypePack(Pipeline):
+class SamplePipeline1(Pipeline):
     spark: SparkSession
     datalake_folder: str
-    table_name: str = field(default='hype_pack')
-    primary_key: list[str] = field(default_factory=lambda: ['hype_packid'])
+    table_name: str = field(default='sample_table')
+    primary_key: list[str] = field(default_factory=lambda: ['first_id', 'second_id'])
     cloudfiles_format: str = field(default='parquet')
     cloudfiles_schema_location: str = field(init=False, repr=True)
     cloud_files_options: dict[str, str] = field(init=False, repr=True)
@@ -29,7 +29,7 @@ class HypePack(Pipeline):
         super().bronze_layer(**kwargs)
 
     def silver_layer(self, **kwargs) -> None:
-        pass
+        super().silver_layer(**kwargs)
 
     def execute(self) -> None:
         # Initializes the raw layer
@@ -42,8 +42,13 @@ class HypePack(Pipeline):
 
         # Initializes the bronze layer
         self.bronze_layer(
-            spark=self.spark,
             datalake_folder=self.datalake_folder,
             table_name=self.table_name,
             primary_key=self.primary_key,
+        )
+
+        self.silver_layer(
+            datalake_folder=self.datalake_folder,
+            table_name=self.table_name,
+            primary_key=self.primary_key
         )

@@ -2,7 +2,7 @@ import pytest
 from pyspark.sql import Column, DataFrame, SparkSession
 from pyspark.sql.functions import count, first
 
-from src.context import Context
+from src.pipeline_orchestrator import Context
 from tests.unit.sample_pipeline_test import SamplePipelineTest
 
 

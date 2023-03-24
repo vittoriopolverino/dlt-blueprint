@@ -1,6 +1,5 @@
 # Databricks notebook source
-from src.context import Context
+from src.pipeline_orchestrator import PipelineOrchestrator
 
 # COMMAND ----------
-context = Context()
-context.load()
+PipelineOrchestrator().start()

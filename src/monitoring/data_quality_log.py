@@ -18,7 +18,7 @@ class DataQualityLog(Pipeline):
     spark: SparkSession
     datalake_folder: str
     table_name: str = field(default='data_quality_log')
-    pipeline_ids: list[str] = field(default_factory=lambda: ['dlt_bronze_dynamics', 'dlt_silver_dynamics'])
+    pipeline_ids: list[str] = field(default_factory=lambda: ['dlt_bronze', 'dlt_silver'])
     event_type: str = 'flow_progress'
 
     def __post_init__(self):
@@ -46,7 +46,7 @@ class DataQualityLog(Pipeline):
             spark=self.spark, table_name=self.table_name, pipeline_ids=self.pipeline_ids, event_type=self.event_type
         )
 
-        @dlt.table(name=table_name, table_properties={'quality': 'bronze'}, temporary=False)
+        @dlt.table(name=table_name, table_properties={'quality': 'bronze'})
         def bronze_table():
             data_quality_log = spark.sql(
                 """

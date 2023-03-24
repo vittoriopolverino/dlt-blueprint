@@ -143,48 +143,6 @@ class Pipeline:
             )
         )
 
-    @staticmethod
-    def get_source_table_rows_count(dataframe: DataFrame, table_name: str) -> int:
-        """
-        Get the number of rows in a source table that has been successfully loaded into the given DataFrame.
-
-        Args:
-            dataframe (DataFrame): The DataFrame to query.
-            table_name (str): The name of the source table to look up.
-
-        Returns:
-            int: The number of rows in the most recently loaded version of the specified source table.
-            If the specified table is not found in the DataFrame, returns 0.
-        """
-        try:
-            return (
-                dataframe.filter(f"table_name = '{table_name}' and status='success'")
-                .sort(col('last_updated_date').desc())
-                .select('source_rows_count')
-                .first()[0]
-            )
-        except (IndexError, TypeError) as exception:
-            logger.logger.error(exception)
-            return -1
-
-    @classmethod
-    def row_count_comparison_against_source_table(cls, spark: SparkSession, table_name: str) -> None:
-        @dlt.table(name=f'row_count_comparison_{table_name}', table_properties={'quality': 'bronze'}, temporary=True)
-        @dlt.expect(
-            f'bronze row_count_comparison_{table_name} - is table row count equal to source',
-            'source_row_count = table_row_count',
-        )
-        def audit_table():
-            # Reads the data ingestions log table
-            data_ingestions_log_df = spark.table('dynamics.data_ingestions_log')
-            source_table_row_count = cls.get_source_table_rows_count(
-                dataframe=data_ingestions_log_df, table_name=table_name
-            )
-            table_row_count = dlt.read(table_name).count()
-            return spark.createDataFrame(
-                [(source_table_row_count, table_row_count)], ['source_row_count', 'table_row_count']
-            )
-
     @classmethod
     def create_bronze_table(cls, datalake_folder: str, table_name: str, primary_key: list[str]) -> None:
         is_pk_not_null = cls.create_pk_is_not_null_condition(primary_key=primary_key)
@@ -192,42 +150,41 @@ class Pipeline:
         is_pk_unique = 'row_count = 1'
 
         @dlt.table(
-            name=table_name,
+            name=f'bronze_{table_name}',
             path=f'{datalake_folder}/{table_name}/bronze',
             table_properties={'quality': 'bronze'},
         )
         @dlt.expect_all(
             {
-                f'bronze {table_name} - not null {primary_key_str}': is_pk_not_null,
-                f'bronze {table_name} - unique {primary_key_str}': is_pk_unique,
+                f'bronze bronze_{table_name} - not null {primary_key_str}': is_pk_not_null,
+                f'bronze bronze_{table_name} - unique {primary_key_str}': is_pk_unique,
             }
         )
         def bronze_table():
-            # Reads the data from the SCD Type 1 table for the given table
             df = dlt.read(f'scd1_{table_name}')
             return cls.check_duplicates_from_df(dataframe=df, primary_key=primary_key)
 
     @classmethod
     def create_silver_table(
-        cls, spark: SparkSession, datalake_folder: str, table_name: str, primary_key: list[str]
+        cls, datalake_folder: str, table_name: str, primary_key: list[str]
     ) -> None:
         is_pk_not_null = cls.create_pk_is_not_null_condition(primary_key=primary_key)
         primary_key_str = ','.join(primary_key)
         is_pk_unique = 'row_count = 1'
 
         @dlt.table(
-            name=f'dynamics_{table_name}',
+            name=f'silver_{table_name}',
             path=f'{datalake_folder}/{table_name}/silver',
             table_properties={'quality': 'silver'},
         )
         @dlt.expect_all(
             {
-                f'silver dynamics_{table_name} - not null {primary_key_str}': is_pk_not_null,
-                f'silver dynamics_{table_name} - unique {primary_key_str}': is_pk_unique,
+                f'silver silver_{table_name} - not null {primary_key_str}': is_pk_not_null,
+                f'silver silver_{table_name} - unique {primary_key_str}': is_pk_unique,
             }
         )
         def silver_table():
-            df = spark.table(f'dynamics.{table_name}').drop('row_count', 'file_name')
+            df = dlt.read(f'bronze_{table_name}').drop('row_count', 'file_name')
             return cls.check_duplicates_from_df(dataframe=df, primary_key=primary_key)
 
     @abstractmethod
@@ -252,29 +209,25 @@ class Pipeline:
         Creates the bronze layer
 
         Args:
-        - spark (SparkSession): spark session
         - datalake_folder (str): the name of the datalake folder containing the data
         - table_name (str): the name of the table to create in the bronze layer
         - primary_key (list[str]): the list of names of the primary key columns of the table
         """
-        spark = kwargs['spark']
         datalake_folder = kwargs['datalake_folder']
         table_name = kwargs['table_name']
         primary_key = kwargs['primary_key']
 
         self.slowly_changing_dimensions_type_1(table_name=table_name, primary_key=primary_key)
         self.create_bronze_table(datalake_folder=datalake_folder, table_name=table_name, primary_key=primary_key)
-        self.row_count_comparison_against_source_table(spark=spark, table_name=table_name)
 
     @abstractmethod
     def silver_layer(self, **kwargs) -> None:
-        spark = kwargs['spark']
         datalake_folder = kwargs['datalake_folder']
         table_name = kwargs['table_name']
         primary_key = kwargs['primary_key']
 
         self.create_silver_table(
-            spark=spark, datalake_folder=datalake_folder, table_name=table_name, primary_key=primary_key
+            datalake_folder=datalake_folder, table_name=table_name, primary_key=primary_key
         )
 
     @abstractmethod

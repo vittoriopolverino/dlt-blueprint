@@ -6,11 +6,11 @@ from src.pipeline import Pipeline
 
 
 @dataclass
-class Contact(Pipeline):
+class SamplePipeline2(Pipeline):
     spark: SparkSession
     datalake_folder: str
-    table_name: str = field(default='contact')
-    primary_key: list[str] = field(default_factory=lambda: ['contactid'])
+    table_name: str = field(default='sample_table')
+    primary_key: list[str] = field(default_factory=lambda: ['id'])
     cloudfiles_format: str = field(default='parquet')
     cloudfiles_schema_location: str = field(init=False, repr=True)
     cloud_files_options: dict[str, str] = field(init=False, repr=True)
@@ -26,14 +26,10 @@ class Contact(Pipeline):
         super().raw_layer(**kwargs)
 
     def bronze_layer(self, **kwargs) -> None:
-        datalake_folder = kwargs['datalake_folder']
-        table_name = kwargs['table_name']
-        primary_key = kwargs['primary_key']
-        super().slowly_changing_dimensions_type_1(table_name=table_name, primary_key=primary_key)
-        super().create_bronze_table(datalake_folder=datalake_folder, table_name=table_name, primary_key=primary_key)
+        super().bronze_layer(**kwargs)
 
     def silver_layer(self, **kwargs) -> None:
-        pass
+        super().silver_layer(**kwargs)
 
     def execute(self) -> None:
         # Initializes the raw layer
@@ -49,4 +45,10 @@ class Contact(Pipeline):
             datalake_folder=self.datalake_folder,
             table_name=self.table_name,
             primary_key=self.primary_key,
+        )
+
+        self.silver_layer(
+            datalake_folder=self.datalake_folder,
+            table_name=self.table_name,
+            primary_key=self.primary_key
         )
