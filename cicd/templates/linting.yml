@@ -1,0 +1,34 @@
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.9'
+      architecture: 'x64'
+    displayName: 'Use Python 3.9'
+
+  - script: |
+      pip install poetry
+    displayName: 'install poetry'
+
+  - script: |
+      poetry install --only cicd-linting --sync
+    displayName: 'install python dependencies'
+
+  - script: |
+      poetry show
+    displayName: 'show installed dependencies'
+
+  - script: |
+      poetry run isort . --check --profile black --filter-files
+    displayName: 'run isort'
+
+  - script: |
+      poetry run black --line-length=120 --skip-string-normalization --check .
+    displayName: 'run python-black'
+
+  - script: |
+      poetry run flake8 --max-line-length 120 --max-function-length 200
+    displayName: 'run flake8'
+
+  - script: |
+      poetry run mypy . --ignore-missing-imports
+    displayName: 'run mypy'

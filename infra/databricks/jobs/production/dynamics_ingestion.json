@@ -1,0 +1,76 @@
+{
+  "created_time": 1678702429696,
+  "creator_user_name": "srv-pr-datb-dvo-de@hype-app.it",
+  "job_id": 691424257587758,
+  "run_as_owner": true,
+  "run_as_user_name": "srv-pr-datb-dvo-de@hype-app.it",
+  "settings": {
+    "email_notifications": {
+      "no_alert_for_skipped_runs": false,
+      "on_failure": [
+        "dataengineering@hype.it"
+      ]
+    },
+    "format": "MULTI_TASK",
+    "max_concurrent_runs": 1,
+    "name": "dynamics_ingestion",
+    "schedule": {
+      "pause_status": "UNPAUSED",
+      "quartz_cron_expression": "11 0 7 * * ?",
+      "timezone_id": "UTC"
+    },
+    "tasks": [
+      {
+        "email_notifications": {
+          "on_failure": [
+            "dataengineering@hype.it"
+          ]
+        },
+        "pipeline_task": {
+          "full_refresh": false,
+          "pipeline_id": "3a1099d5-2d49-4bc4-b4ff-1466ed247acf"
+        },
+        "task_key": "dlt_bronze_dynamics",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "dlt_bronze_dynamics"
+          }
+        ],
+        "email_notifications": {
+          "on_failure": [
+            "dataengineering@hype.it"
+          ]
+        },
+        "pipeline_task": {
+          "full_refresh": false,
+          "pipeline_id": "a1111c86-fcd9-4a7f-9fd8-01da51940101"
+        },
+        "task_key": "dlt_silver_dynamics",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "dlt_silver_dynamics"
+          }
+        ],
+        "email_notifications": {
+          "on_failure": [
+            "dataengineering@hype.it"
+          ]
+        },
+        "pipeline_task": {
+          "full_refresh": false,
+          "pipeline_id": "7be1316d-fa8f-4142-b3db-2951f77dbf52"
+        },
+        "task_key": "dlt_data_quality_log_dynamics",
+        "timeout_seconds": 0
+      }
+    ],
+    "timeout_seconds": 0,
+    "webhook_notifications": {}
+  }
+}

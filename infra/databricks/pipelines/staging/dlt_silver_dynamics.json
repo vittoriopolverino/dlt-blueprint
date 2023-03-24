@@ -1,0 +1,39 @@
+{
+  "channel": "CURRENT",
+  "clusters": [
+    {
+      "autoscale": {
+        "max_workers": 2,
+        "min_workers": 1,
+        "mode": "ENHANCED"
+      },
+      "label": "default",
+      "spark_conf": {
+        "fs.azure.account.auth.type": "OAuth",
+        "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/6ad42bf6-c461-4a73-8cae-0747c4bb856e/oauth2/token",
+        "fs.azure.account.oauth2.client.id": "{{secrets/data-platform/data-databricks-datalake-ext-sources-appid}}",
+        "fs.azure.account.oauth2.client.secret": "{{secrets/data-platform/data-databricks-datalake-ext-sources-apppwd}}",
+        "spark.databricks.delta.schema.autoMerge.enabled": "true"
+      }
+    }
+  ],
+  "configuration": {
+    "layer": "silver"
+  },
+  "continuous": false,
+  "development": true,
+  "edition": "ADVANCED",
+  "id": "fbaa61bc-e8bc-4f85-bd2a-ace70d584d5c",
+  "libraries": [
+    {
+      "notebook": {
+        "path": "/Repos/crm-ingestion-datb/crm-ingestion-datb/entrypoint"
+      }
+    }
+  ],
+  "name": "dlt_silver_dynamics",
+  "photon": true,
+  "storage": "dbfs:/pipelines/dlt_silver_dynamics",
+  "target": "silver"
+}

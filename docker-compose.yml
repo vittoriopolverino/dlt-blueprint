@@ -1,0 +1,11 @@
+version: '3'
+
+services:
+  unit-test-spark:
+    build: .
+    volumes:
+      - $PWD/src:/app/src
+      - $PWD/tests:/app/tests
+      - $PWD/scripts:/app/scripts
+    # Set the working directory to 'app'
+    working_dir: /app

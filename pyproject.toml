@@ -1,0 +1,53 @@
+[tool.poetry]
+name = "cmr-ingestion-datb"
+version = "0.1.0"
+description = ""
+authors = ["Data Engineering"]
+readme = "README.md"
+packages = [
+    {include = "src"}
+]
+
+[tool.poetry.dependencies]
+python = "^3.9"
+pyspark = "^3.3.1"
+delta-spark = "^2.2.0"
+
+[tool.poetry.group.dev.dependencies]
+python = "^3.9"
+pyspark = "^3.3.1"
+delta-spark = "^2.2.0"
+pytest = "^7.2.2"
+pre-commit = "^2.21.0"
+black = "^23.1.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+flake8-functions = "^0.0.7"
+flake8-print = "^5.0.0"
+flake8-builtins = "^2.1.0"
+mypy = "^1.0.1"
+
+[tool.poetry.group.cicd-linting.dependencies]
+black = "^23.1.0"
+isort = "^5.12.0"
+flake8 = "^6.0.0"
+flake8-functions = "^0.0.7"
+flake8-print = "^5.0.0"
+flake8-builtins = "^2.1.0"
+mypy = "^1.0.1"
+
+[tool.poetry.group.cicd-qa.dependencies]
+pyspark = "^3.3.1"
+pytest = "^7.2.2"
+pytest-azurepipelines = "^1.0.4"
+pytest-cov = "^4.0.0"
+setuptools = "^65.6.3"
+
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
+
+[tool.poetry.scripts]
+
+[tool.pydocstyle]

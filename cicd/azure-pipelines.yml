@@ -1,0 +1,61 @@
+trigger:
+- develop
+- staging
+- main
+
+pr:
+  branches:
+    include:
+      - '*'
+
+variables:
+  - ${{ if startsWith(variables['Build.SourceBranch'], 'refs/heads/') }}:
+      - name: branch_name
+        value: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
+      - ${{ if eq(variables['build.SourceBranchName'], 'staging') }}:
+          - group: st-cicd-datb
+          - name: databricks_host
+            value: $[variables.host]
+          - name: databricks_token
+            value: $[variables.token]
+          - name: repo_id
+            value: 3262427881323064
+      - ${{ if eq(variables['build.SourceBranchName'], 'main') }}:
+          - group: pr-cicd-datb
+          - name: databricks_host
+            value: $[variables.host]
+          - name: databricks_token
+            value: $[variables.token]
+          - name: repo_id
+            value: 3826327286487167
+
+stages:
+- stage: linting
+  jobs:
+    - job: linting
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+        - template: templates/linting.yml
+
+- stage: qa
+  dependsOn: linting
+  condition: succeeded()
+  jobs:
+    - job: unit_test
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+        - template: templates/qa.yml
+
+- stage: deploy
+  dependsOn:
+    - linting
+    - qa
+  condition: or(eq(variables['build.SourceBranchName'], 'main'), eq(variables['build.SourceBranchName'], 'staging'))
+  jobs:
+    - job: databricks_deploy
+      pool:
+        vmImage: ubuntu-latest
+      steps:
+        - template: templates/databricks_deploy.yml

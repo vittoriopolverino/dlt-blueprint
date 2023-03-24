@@ -1,0 +1,32 @@
+steps:
+  - task: UsePythonVersion@0
+    inputs:
+      versionSpec: '3.9'
+      architecture: 'x64'
+    displayName: 'Use Python 3.9'
+
+  - script: |
+      sudo apt-get update && sudo apt-get install -y openjdk-8-jdk
+    displayName: 'install openjdk'
+
+  - script: |
+      pip install poetry
+    displayName: 'install poetry'
+
+  - script: |
+      poetry install --only cicd-qa --sync
+    displayName: 'install python dependencies'
+
+  - script: |
+      poetry show
+    displayName: 'show installed dependencies'
+
+  - script: |
+      poetry run pytest -v $(Build.Repository.LocalPath)/tests/ --junitxml=$(Build.Repository.LocalPath)/logs/test_results.xml --cov=src/ --cov-append --cov-report=xml:coverage.xml
+    displayName: 'run unit tests with coverage'
+
+  - task: PublishCodeCoverageResults@1
+    inputs:
+      codeCoverageTool: Cobertura
+      summaryFileLocation: 'coverage.xml'
+    displayName: 'publish test coverage results'

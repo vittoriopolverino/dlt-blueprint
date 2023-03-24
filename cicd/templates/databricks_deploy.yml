@@ -1,0 +1,16 @@
+steps:
+  - script: |
+      pip install databricks-cli --upgrade
+    displayName: 'install databricks-cli'
+
+  - task: Bash@3
+    inputs:
+      filePath: '$(System.DefaultWorkingDirectory)/infra/databricks/databricks_deploy.sh'
+    env:
+      DATABRICKS_HOST: $(databricks_host)
+      DATABRICKS_TOKEN: $(databricks_token)
+      DATABRICKS_REPO_ID: $(repo_id)
+      BRANCH_NAME: $(branch_name)
+      WORKING_DIRECTORY: '$(System.DefaultWorkingDirectory)'
+
+    displayName: 'deploy databricks'

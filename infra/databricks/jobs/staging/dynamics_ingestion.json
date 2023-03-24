@@ -1,0 +1,71 @@
+{
+  "created_time": 1678363199809,
+  "creator_user_name": "srv-st-datb-dvo-de@hype-app.it",
+  "job_id": 1020453342091936,
+  "run_as_owner": true,
+  "run_as_user_name": "srv-st-datb-dvo-de@hype-app.it",
+  "settings": {
+    "email_notifications": {
+      "no_alert_for_skipped_runs": false,
+      "on_failure": [
+        "vittorio.polverino@hype.it"
+      ]
+    },
+    "format": "MULTI_TASK",
+    "max_concurrent_runs": 1,
+    "name": "dynamics_ingestion",
+    "tasks": [
+      {
+        "email_notifications": {
+          "on_failure": [
+            "vittorio.polverino@hype.it"
+          ]
+        },
+        "pipeline_task": {
+          "full_refresh": false,
+          "pipeline_id": "c09fd3b4-22bb-4628-afc2-0d91f675b052"
+        },
+        "task_key": "dlt_bronze_dynamics",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "dlt_bronze_dynamics"
+          }
+        ],
+        "email_notifications": {
+          "on_failure": [
+            "vittorio.polverino@hype.it"
+          ]
+        },
+        "pipeline_task": {
+          "full_refresh": false,
+          "pipeline_id": "fbaa61bc-e8bc-4f85-bd2a-ace70d584d5c"
+        },
+        "task_key": "dlt_silver_dynamics",
+        "timeout_seconds": 0
+      },
+      {
+        "depends_on": [
+          {
+            "task_key": "dlt_silver_dynamics"
+          }
+        ],
+        "email_notifications": {
+          "on_failure": [
+            "vittorio.polverino@hype.it"
+          ]
+        },
+        "pipeline_task": {
+          "full_refresh": false,
+          "pipeline_id": "07a168c6-f4e1-4060-aeba-2bc080177096"
+        },
+        "task_key": "dlt_data_quality_log_dynamics",
+        "timeout_seconds": 0
+      }
+    ],
+    "timeout_seconds": 0,
+    "webhook_notifications": {}
+  }
+}
