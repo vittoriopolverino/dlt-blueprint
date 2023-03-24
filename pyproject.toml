@@ -1,8 +1,8 @@
 [tool.poetry]
-name = "cmr-ingestion-datb"
+name = "dlt-blueprint"
 version = "0.1.0"
 description = ""
-authors = ["Data Engineering"]
+authors = ["Vittorio Polverino"]
 readme = "README.md"
 packages = [
     {include = "src"}
