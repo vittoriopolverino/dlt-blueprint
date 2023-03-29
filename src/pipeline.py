@@ -75,11 +75,11 @@ class Pipeline:
     @staticmethod
     def slowly_changing_dimensions_type_1(table_name: str, primary_key: list[str]) -> None:
         """
-        Applies Slowly Changing Dimensions (SCD) Type 1 to a table.
+        Applies Slowly Changing Dimensions (SCD) Type 1
 
         Args:
-        - table_name (str): the name of the table to apply SCD Type 1 to
-        - primary_key (list[str]): the list of names of the columns that make up the
+        - table_name (str): the name of the table to apply SCD Type 1
+        - primary_key (list[str]): the columns name list that make up the
         primary key of the table
         """
 
@@ -100,7 +100,7 @@ class Pipeline:
     @staticmethod
     def create_pk_is_not_null_condition(primary_key: list[str]) -> str:
         """
-        Generates a condition to use in a WHERE clause that checks that all primary key columns are
+        Generates a condition to checks that all primary key columns are
         not NULL.
 
         Args:

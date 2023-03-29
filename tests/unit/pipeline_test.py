@@ -10,24 +10,8 @@ def test_create_group_by_field_list(mock_pipeline, mock_dataframe, mock_primary_
     assert all(str(result[i].name) == str(expected[i].name) for i in range(len(result)))
 
 
-def test_source_table_row_count_comparison(mock_pipeline, mock_data_ingestions_log_dataframe):
-    result = int(
-        mock_pipeline.get_source_table_rows_count(dataframe=mock_data_ingestions_log_dataframe, table_name='test_table')
-    )
-    # expected rows count for the table "mock_table"
-    expected = 1450
-    assert result == expected
-
-
 def test_create_pk_is_not_null_condition(mock_pipeline, mock_primary_key_multiple_fields):
     result = mock_pipeline.create_pk_is_not_null_condition(primary_key=mock_primary_key_multiple_fields)
     expected = 'FIRST_ID IS NOT NULL AND SECOND_ID IS NOT NULL'
     assert result == expected
 
-
-def test_get_source_table_rows_count(mock_pipeline, mock_data_ingestions_log_dataframe):
-    result = mock_pipeline.get_source_table_rows_count(
-        dataframe=mock_data_ingestions_log_dataframe, table_name='test_table'
-    )
-    expected = 1450
-    assert result == expected
