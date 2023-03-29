@@ -1,0 +1,39 @@
+{
+  "channel": "CURRENT",
+  "clusters": [
+    {
+      "autoscale": {
+        "max_workers": 2,
+        "min_workers": 1,
+        "mode": "ENHANCED"
+      },
+      "label": "default",
+      "spark_conf": {
+        "fs.azure.account.auth.type": "OAuth",
+        "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
+        "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/sample-endpoint/oauth2/token",
+        "fs.azure.account.oauth2.client.id": "{{secrets/sample-scope/sample-client-id}}",
+        "fs.azure.account.oauth2.client.secret": "{{secrets/sample-scope/sample-client-secret}}",
+        "spark.databricks.delta.schema.autoMerge.enabled": "true"
+      }
+    }
+  ],
+  "configuration": {
+    "layer": "data_quality"
+  },
+  "continuous": false,
+  "development": false,
+  "edition": "ADVANCED",
+  "id": "sample-pipeline-id",
+  "libraries": [
+    {
+      "notebook": {
+        "path": "/Repos/dlt-blueprint/dlt-blueprint/entrypoint"
+      }
+    }
+  ],
+  "name": "dlt_data_quality_log",
+  "photon": true,
+  "storage": "dbfs:/pipelines/dlt_data_quality_log",
+  "target": "sample-schema"
+}

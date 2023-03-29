@@ -176,9 +176,8 @@ update_repo() {
   echo -en "\n ------------------------------------------- \n"
 }
 
-deploy_clusters
+
 deploy_pipelines
-deploy_jobs
 update_repo
 
 exit 0

@@ -11,9 +11,9 @@
       "spark_conf": {
         "fs.azure.account.auth.type": "OAuth",
         "fs.azure.account.oauth.provider.type": "org.apache.hadoop.fs.azurebfs.oauth2.ClientCredsTokenProvider",
-        "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/6ad42bf6-c461-4a73-8cae-0747c4bb856e/oauth2/token",
-        "fs.azure.account.oauth2.client.id": "{{secrets/data-platform/data-databricks-datalake-ext-sources-appid}}",
-        "fs.azure.account.oauth2.client.secret": "{{secrets/data-platform/data-databricks-datalake-ext-sources-apppwd}}",
+        "fs.azure.account.oauth2.client.endpoint": "https://login.microsoftonline.com/sample-endpoint/oauth2/token",
+        "fs.azure.account.oauth2.client.id": "{{secrets/sample-scope/sample-client-id}}",
+        "fs.azure.account.oauth2.client.secret": "{{secrets/sample-scope/sample-client-secret}}",
         "spark.databricks.delta.schema.autoMerge.enabled": "true"
       }
     }
@@ -24,16 +24,16 @@
   "continuous": false,
   "development": false,
   "edition": "ADVANCED",
-  "id": "3a1099d5-2d49-4bc4-b4ff-1466ed247acf",
+  "id": "sample-pipeline-id",
   "libraries": [
     {
       "notebook": {
-        "path": "/Repos/crm-ingestion-datb/crm-ingestion-datb/entrypoint"
+        "path": "/Repos/dlt-blueprint/dlt-blueprint/entrypoint"
       }
     }
   ],
-  "name": "dlt_bronze_dynamics",
+  "name": "dlt_pipeline",
   "photon": true,
-  "storage": "dbfs:/pipelines/dlt_bronze_dynamics",
-  "target": "dynamics"
+  "storage": "dbfs:/pipelines/dlt_pipeline",
+  "target": "sample-schema"
 }

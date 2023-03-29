@@ -13,21 +13,21 @@ variables:
       - name: branch_name
         value: $[ replace(variables['Build.SourceBranch'], 'refs/heads/', '') ]
       - ${{ if eq(variables['build.SourceBranchName'], 'staging') }}:
-          - group: st-cicd-datb
+          - group: sample-variable-group
           - name: databricks_host
             value: $[variables.host]
           - name: databricks_token
             value: $[variables.token]
           - name: repo_id
-            value: 3262427881323064
+            value: sample-repo-id
       - ${{ if eq(variables['build.SourceBranchName'], 'main') }}:
-          - group: pr-cicd-datb
+          - group: sample-variable-group
           - name: databricks_host
             value: $[variables.host]
           - name: databricks_token
             value: $[variables.token]
           - name: repo_id
-            value: 3826327286487167
+            value: sample-repo-id
 
 stages:
 - stage: linting
