@@ -53,21 +53,8 @@ from src.pipeline.my_pipeline import MyPipeline
 
 # Mapping of class names to class objects for the Bronze layer
 class_names = {
-    'contact': Contact,
-    'email': Email,
-    'hype_casestatus': HypeCasestatus,
-    'hype_category': HypeCategory,
-    'hype_corebankingstatus': HypeCorebankingStatus,
-    'hype_emoneyaccount': HypeEmoneyaccount,
-    'hype_pack': HypePack,
-    'hype_product': HypeProduct,
-    'hype_statustransitionlog': HypeStatustransitionlog,
-    'hype_subcategory': HypeSubcategory,
-    'hype_tag': HypeTag,
-    'incident': Incident,
-    'queue': Queue,
-    'systemuser': Systemuser,
-    'team': Team,
+    'sample_pipeline_1': SamplePipeline1,
+    'sample_pipeline_2': SamplePipeline2,
     'my_pipeline': MyPipeline,
 }
 
