@@ -1,5 +1,5 @@
-## Delta Live Tables Blueprint
-to do
+# Delta Live Tables Blueprint
+
 <br />
 
 ## 📜 Table of Contents
@@ -15,17 +15,16 @@ to do
 <br />
 
 ## 🧐 About <a name = "about"></a>
-to do
+Blueprint to initialize a project with Databricks Delta Live Tables and Azure Data Lake Storage.
+Resource for anyone is looking to leverage Databricks DLT in a professional and organized manner,
+making it easier to follow software engineering best practice rather than relying on notebooks.
 
 <br />
 
 ## 🏁 Getting Started <a name = "getting_started"></a>
 
-Good news, you don't need to install any dependencies on your machine. 
-Poetry allows us to manage dependencies and packaging in Python
-
-To install the dependencies listed in your pyproject.toml file, use the following script:
-
+Great news! You can sit back, relax, and forget about installing any dependencies on your machine.
+To effortlessly install the dependencies listed in your pyproject.toml file, I've prepared a nifty little script just for you:
 ```
 sh scripts/poetry_init.sh 
 ```
@@ -45,14 +44,14 @@ implementations for the raw, bronze, and silver layers.
 - By implementing these methods in your new pipeline class, you can define how the input data is transformed at each stage.
 
 Once you've created the new class, you can import it into the 
-**class_mapping.py** file and add it to the **class_names** dictionary with 
+**class_mapping.py** file and add it to the **mapper** dictionary with 
 a unique name that will be used to dynamically load the class at runtime. 
 For example:
 ``` python
 from src.pipeline.my_pipeline import MyPipeline
 
 # Mapping of class names to class objects for the Bronze layer
-class_names = {
+mapper = {
     'sample_pipeline_1': SamplePipeline1,
     'sample_pipeline_2': SamplePipeline2,
     'my_pipeline': MyPipeline,
@@ -65,15 +64,8 @@ any other pipeline by referencing its name when you create a new pipeline
 object. Once the context is instantiated, all the elements in the dictionary 
 will be executed.
 
-The **Context** class in context.py file, is an object that implements 
-a strategy pattern to execute a specific set of functions based on the 
-value of the layer configuration setting. 
-
-The main purpose of the class is to create a list of strategy objects based 
-on the names and corresponding classes provided in the **class_names** dictionary.
-
-Overall, the Context class provides a flexible and extensible way to perform 
-data processing tasks based on the specific needs of a project or application.
+The **PipelineOrchestrator** class in pipeline_orchestrator.py file, is an object that implements 
+a design pattern to orchestrate the execution of pipelines provided in the **mapper** dictionary
 
 <br />
 

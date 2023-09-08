@@ -6,8 +6,8 @@ from src.pipelines.sample_pipeline_1 import SamplePipeline1
 
 def test_create_strategies_default(mock_pipeline_orchestrator):
     spark = mock_pipeline_orchestrator.spark
-    pipelines = mock_pipeline_orchestrator.get_pipelines(execution_type='default')
-    result = mock_pipeline_orchestrator.create_strategies(
+    pipelines = mock_pipeline_orchestrator.get_pipeline_objects(execution_type='default')
+    result = mock_pipeline_orchestrator.create_pipeline_istances(
         spark=spark,
         datalake_folder='abfss://container_name@datalake_name.dfs.core.windows.net/sample',
         pipelines=pipelines
@@ -30,8 +30,8 @@ def test_create_strategies_default(mock_pipeline_orchestrator):
 
 def test_create_strategies_monitoring(mock_pipeline_orchestrator):
     spark = mock_pipeline_orchestrator.spark
-    pipelines = mock_pipeline_orchestrator.get_pipelines(execution_type='monitoring')
-    result = mock_pipeline_orchestrator.create_strategies(
+    pipelines = mock_pipeline_orchestrator.get_pipeline_objects(execution_type='monitoring')
+    result = mock_pipeline_orchestrator.create_pipeline_istances(
         spark=spark,
         datalake_folder='abfss://container_name@datalake_name.dfs.core.windows.net/sample',
         pipelines=pipelines
@@ -53,10 +53,10 @@ def test_create_strategies_monitoring(mock_pipeline_orchestrator):
 
 
 def test_get_pipelines(mock_pipeline_orchestrator):
-    result_default_pipelines = mock_pipeline_orchestrator.get_pipelines(execution_type='default')
+    result_default_pipelines = mock_pipeline_orchestrator.get_pipeline_objects(execution_type='default')
     expected_default_pipelines = default_mapper
 
-    result_monitoring_pipelines = mock_pipeline_orchestrator.get_pipelines(execution_type='monitoring')
+    result_monitoring_pipelines = mock_pipeline_orchestrator.get_pipeline_objects(execution_type='monitoring')
     expected_monitoring_pipelines = monitoring_mapper
 
     assert result_default_pipelines == expected_default_pipelines

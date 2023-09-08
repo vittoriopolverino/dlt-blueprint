@@ -25,7 +25,7 @@ class PipelineOrchestrator:
             container_name=self.container_name,
             scope_name=self.scope_name
         )
-        self.pipelines = self.get_pipelines(execution_type=self.execution_type)
+        self.pipelines = self.get_pipeline_objects(execution_type=self.execution_type)
 
     @staticmethod
     def get_datalake_folder(spark: SparkSession, scope_name: str, container_name: str) -> str:
@@ -39,7 +39,7 @@ class PipelineOrchestrator:
             return 'n/a'
 
     @staticmethod
-    def get_pipelines(execution_type: str) -> dict[Pipeline]:
+    def get_pipeline_objects(execution_type: str) -> dict[Pipeline]:
         class_mapper: dict = {
             'default': default_mapper,
             'monitoring': monitoring_mappper,
@@ -47,16 +47,16 @@ class PipelineOrchestrator:
         return class_mapper.get(execution_type)
 
     @staticmethod
-    def create_strategies(spark: SparkSession, pipelines: dict[Pipeline], datalake_folder: str) -> list:
+    def create_pipeline_instances(spark: SparkSession, pipelines: dict[Pipeline], datalake_folder: str) -> list:
         return [pipeline(spark=spark, datalake_folder=datalake_folder) for pipeline in pipelines.values()]
 
     @staticmethod
-    def execute_strategies(strategies: list) -> None:
-        for strategy in strategies:
-            strategy.execute()
+    def execute_pipelines(pipelines: list) -> None:
+        for pipeline in pipelines:
+            pipeline.execute()
 
     def start(self) -> None:
-        self.strategies = self.create_strategies(
+        pipeline_instances = self.create_pipeline_instances(
             spark=self.spark, datalake_folder=self.datalake_folder, pipelines=self.pipelines
         )
-        self.execute_strategies(strategies=self.strategies)
+        self.execute_pipelines(pipelines=pipeline_instances)
