@@ -1,6 +1,5 @@
 # Delta Live Tables Blueprint
 
-![Capture.PNG](images%2FCapture.PNG)
 ![Capture1.PNG](images%2FCapture1.PNG)
 ![Capture4.PNG](images%2FCapture4.PNG)
 ![Capture5.PNG](images%2FCapture5.PNG)
