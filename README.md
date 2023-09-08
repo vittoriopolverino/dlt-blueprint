@@ -1,5 +1,10 @@
 # Delta Live Tables Blueprint
 
+![Capture.PNG](images%2FCapture.PNG)
+![Capture1.PNG](images%2FCapture1.PNG)
+![Capture4.PNG](images%2FCapture4.PNG)
+![Capture5.PNG](images%2FCapture5.PNG)
+
 <br />
 
 ## 📜 Table of Contents
@@ -86,6 +91,8 @@ This script will only be executed by the CICD pipelines upon approval of pull re
 
     displayName: 'deploy databricks'
 ```
+![Capture6.PNG](images%2FCapture6.PNG)
+
 
 <br />
 
@@ -112,6 +119,8 @@ You can also run the test manually by using the following command:
 ```
 docker-compose up
 ```
+![Capture7.PNG](images%2FCapture7.PNG)
+![Capture8.PNG](images%2FCapture8.PNG)
 
 <br />
 
